@@ -1,0 +1,72 @@
+﻿@{
+    ViewData["Title"] = "PostStudent";
+}
+<table>
+
+
+
+
+
+
+                    <tr id="name" >
+                        <td>  <label>Name</label></td>
+                        <td> <input class="form-control" type="type" name="Name" value="" /> </td>
+                    </tr>
+
+                    <tr id="sub">
+                        <td> <label>Sub</label></td>
+                        <td>  <input class="form-control" type="type" name="Sub" value="" /></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class="btn btn-outline-primary" type="button" value="Create" onclick="Save()" />
+                        </td>
+                    </tr>
+
+
+                    <tr>
+                        <td>
+                            <a class="btn btn-outline-secondary mt-5" asp-area="" asp-controller="students" asp-action="ListOfStudent">Back to List</a>
+                        </td>
+                    </tr>
+
+</table>
+
+@section scripts{
+    <script>
+        
+
+        function Save() {
+            var student = {
+                name: $("input[name='Name']").val(),
+                sub: $("input[name='Sub']").val()
+            };
+
+            createStudent(student);
+            
+        }
+
+        function createStudent(student) {
+            $.ajax({
+                url: '/students/CreateStudent',
+                method: 'POST',
+                data: student,
+                success: function (response) {
+                    if (response = true) {
+                        window.location.href = '/Students/ListOfStudent';
+                    } else {
+                        alert('Failed to update the student.');
+                    }
+                },
+                error: function (error) {
+                    console.error(error);
+                    alert('Error occurred while updating the student.');
+                }
+            });
+
+            
+        }
+
+    </script>
+
+}

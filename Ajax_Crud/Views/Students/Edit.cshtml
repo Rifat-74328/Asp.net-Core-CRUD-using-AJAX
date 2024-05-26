@@ -1,0 +1,52 @@
+﻿@model Ajax_Crud.Models.Student
+
+@{
+    ViewData["Title"] = "Edit Student";
+}
+
+<h1>Edit Student</h1>
+
+<h4>Student</h4>
+<hr />
+<form id="editStudentForm">
+    <input type="hidden" asp-for="id" />
+    <div class="form-group">
+        <label asp-for="name"></label>
+        <input class="form-control" asp-for="name" />
+    </div>
+    <div class="form-group">
+        <label asp-for="sub"></label>
+        <input class="form-control" asp-for="sub" />
+    </div>
+    <button type="button" class="btn btn-primary" onclick="saveEdit()">Save</button>
+    <a asp-action="ListOfStudent" class="btn btn-secondary">Back to List</a>
+</form>
+
+@section Scripts {
+    <script>
+        function saveEdit() {
+            var student = {
+                id: $("input[name='id']").val(),
+                name: $("input[name='name']").val(),
+                sub: $("input[name='sub']").val()
+            };
+
+            $.ajax({
+                url: '/Students/Edit',
+                type: 'POST',
+                data: student,
+                success: function (response) {
+                    if (response = true ) {
+                        window.location.href = '/Students/ListOfStudent';
+                    } else {
+                        alert('Failed to update the student.');
+                    }
+                },
+                error: function (error) {
+                    console.error(error);
+                    alert('Error occurred while updating the student.');
+                }
+            });
+        }
+    </script>
+}

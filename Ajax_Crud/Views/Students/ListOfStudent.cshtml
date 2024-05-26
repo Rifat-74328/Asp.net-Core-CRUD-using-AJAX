@@ -1,0 +1,89 @@
+﻿
+@{
+    ViewData["Title"] = "ListOfStudent";
+}
+
+    <a class="btn btn-success mb-3" asp-area="" asp-controller="students" asp-action="PostStudent">Create Student</a>
+    <table class="table table-bordered text-center">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Sub</th>
+                <th>Action</th>
+                
+            </tr>
+        </thead>
+
+        <tbody id="std" style="background-color:blanchedalmond" >
+            
+        </tbody>
+    </table>
+
+    
+
+    </html>
+    
+@section scripts {
+        <script>
+            $(document).ready(function () {
+                ShowStudents();
+                
+            });
+
+            function ShowStudents() { 
+               
+            $.ajax({
+                url: '/Students/ListOfStudents',
+                type: 'GET',
+                // dataType: 'json', // Use 'json' instead of 'jsonp'
+                // contentType: 'application/json;charset=utf-8',
+                success: function (result) {
+                    console.log(result);
+
+                    var object = '';
+                    $.each(result, function (index, item) {
+                        object += '<tr>';
+                        object += '<td>' + item.id + '</td>';
+                        object += '<td>' + item.name + '</td>';
+                        object += '<td>' + item.sub + '</td>';
+                        object += '<td><a  class="btn btn-outline-success" onclick="Edit('+item.id+')">Edit</a>||<a  class="btn btn-outline-danger" onclick="Delete('+item.id+')">Delete</a> </td>';
+                        
+                        ; // You need to update this based on your requirement
+                        object += '</tr>';
+                    });
+                    $('#std').html(object);
+                },
+                error: function (e) {
+                    console.error(e);
+                }
+            });
+            };
+
+
+
+
+        function Delete(id) {
+           
+            if (confirm("Do you want to dete This Record")) {
+                $.ajax({
+                    url: '/Students/Delete?id=' + id,
+                    type: 'POST',
+                    success: function () {
+                        
+                        ShowStudents();
+                    },
+                    error: console.error("Cannot be deleted")
+                })
+            }
+
+        }
+
+
+        function Edit(id) {
+            window.location.href = '/Students/Edit/' + id;
+        }
+        
+            
+        </script>
+    }
